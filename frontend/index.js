@@ -6,10 +6,7 @@ fetch('/graphql', {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
-    body: JSON.stringify({
-        query,
-        variables: { dice, sides },
-    })
+    body: JSON.stringify({query: "{ hello }"")
 })
     .then(r => r.json())
     .then(data => console.log('Data returned: ', data));

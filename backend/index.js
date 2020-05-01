@@ -14,10 +14,12 @@ var schema = buildSchema(`
         id: Int!
         name: String!
         ingredients: [Ingredient!]
+        photoURL: String
     }
 
     type Query {
         recipe(name: String): Recipe
+        hello: String
     }
 `);
 
@@ -54,6 +56,9 @@ var root = {
     recipe: (name) => {
         return new Recipe();
     },
+    hello: () => {
+        return "Hello, World!";
+    },
 };
 
 // Run the graphQL server
@@ -66,3 +71,4 @@ app.use('/graphql', graphqlHTTP({
 
 app.listen(4000);
 console.log("Running a test graphql API server at http://localhost:4000/graphql");
+
