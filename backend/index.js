@@ -1,6 +1,13 @@
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
+var Scraper = require('images-scraper');
+
+const scraper = new Scraper({
+    puppeteer: {
+        headless: true,
+    }
+});
 
 var schema = buildSchema(`
     type Ingredient {
@@ -14,7 +21,7 @@ var schema = buildSchema(`
         id: Int!
         name: String!
         ingredients: [Ingredient!]
-        photoURL: String
+        image: String
     }
 
     type Query {
@@ -43,12 +50,16 @@ class Recipe {
         return 1;
     }
     name() {
-        return "Just flour";
+        return "Flour";
     }
     ingredients() {
         let ings = [];
         ings[0] = new Ingredient();
+        ings[1] = new Ingredient();
         return ings;
+    }
+    image(){
+        return "image.url.thing"
     }
 }
 
