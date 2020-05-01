@@ -4,23 +4,55 @@ var { buildSchema } = require('graphql');
 
 var schema = buildSchema(`
     type Ingredient {
-        name: String
-        amount: Int
+        id: Int!
+        name: String!
+        amount: Int!
+        measurement: String!
     }
 
     type Recipe {
-        name: String
-        
+        id: Int!
+        name: String!
+        ingredients: [Ingredient!]
     }
 
     type Query {
-        hello: String
+        recipe(name: String): Recipe
     }
 `);
 
+class Ingredient {
+    id() {
+        return 1;
+    }
+    name() {
+        return "Flour"
+    }
+    amount() {
+        return 2;
+    }
+    measurement() {
+        return "Cup(s)";
+    }
+}
+
+class Recipe {
+    id() {
+        return 1;
+    }
+    name() {
+        return "Just flour";
+    }
+    ingredients() {
+        let ings = [];
+        ings[0] = new Ingredient();
+        return ings;
+    }
+}
+
 var root = {
-    hello: () => {
-        return 'Hello world!';
+    recipe: (name) => {
+        return new Recipe();
     },
 };
 
