@@ -11,17 +11,19 @@ const scraper = new Scraper({
 
 var schema = buildSchema(`
     type Ingredient {
-        id: Int!
+        id: ID
         name: String!
         amount: Int!
         measurement: String!
+        category: String!
     }
 
     type Recipe {
-        id: Int!
+        id: ID
         name: String!
         ingredients: [Ingredient!]
         image: String
+        serves: Int
     }
 
     type Query {
@@ -46,11 +48,14 @@ class Ingredient {
 }
 
 class Recipe {
+    constructor (name) {
+        this.testName = name;
+    }
     id() {
         return 1;
     }
     name() {
-        return "Flour";
+        return this.testName;
     }
     ingredients() {
         let ings = [];
@@ -64,8 +69,8 @@ class Recipe {
 }
 
 var root = {
-    recipe: (name) => {
-        return new Recipe();
+    recipe: ({name}) => {
+        return new Recipe(name);
     },
     hello: () => {
         return "Hello, World!";
