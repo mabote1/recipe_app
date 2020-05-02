@@ -1,20 +1,29 @@
 var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
+var Scraper = require('images-scraper');
+
+const scraper = new Scraper({
+    puppeteer: {
+        headless: true,
+    }
+});
 
 var schema = buildSchema(`
     type Ingredient {
-        id: Int!
+        id: ID
         name: String!
         amount: Int!
         measurement: String!
+        category: String!
     }
 
     type Recipe {
-        id: Int!
+        id: ID
         name: String!
         ingredients: [Ingredient!]
-        photoURL: String
+        image: String
+        serves: Int
     }
 
     type Query {
@@ -39,22 +48,29 @@ class Ingredient {
 }
 
 class Recipe {
+    constructor (name) {
+        this.testName = name;
+    }
     id() {
         return 1;
     }
     name() {
-        return "Just flour";
+        return this.testName;
     }
     ingredients() {
         let ings = [];
         ings[0] = new Ingredient();
+        ings[1] = new Ingredient();
         return ings;
+    }
+    image(){
+        return "image.url.thing"
     }
 }
 
 var root = {
-    recipe: (name) => {
-        return new Recipe();
+    recipe: ({name}) => {
+        return new Recipe(name);
     },
     hello: () => {
         return "Hello, World!";
