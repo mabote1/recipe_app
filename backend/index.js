@@ -2,11 +2,19 @@ var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
+const { Pool } = require('pg');
 
 const scraper = new Scraper({
     puppeteer: {
         headless: true,
     }
+});
+
+const pool = new Pool({
+    user: 'olson16',
+    host: 'csinparallel.cs.stolaf.edu',
+    database: 'mca_s20',
+    port: 5432,
 });
 
 var schema = buildSchema(`
