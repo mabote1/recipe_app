@@ -3,6 +3,7 @@ var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
 const { Pool } = require('pg');
+const fs = require('fs');
 
 const scraper = new Scraper({
     puppeteer: {
@@ -14,6 +15,7 @@ const pool = new Pool({
     user: 'olson16',
     host: 'csinparallel.cs.stolaf.edu',
     database: 'mca_s20',
+    password: 
     port: 5432,
 });
 
