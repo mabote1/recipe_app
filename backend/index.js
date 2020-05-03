@@ -15,7 +15,7 @@ const pool = new Pool({
     user: 'olson16',
     host: 'csinparallel.cs.stolaf.edu',
     database: 'mca_s20',
-    password: 
+    password: 'PGPASSWORD',
     port: 5432,
 });
 
