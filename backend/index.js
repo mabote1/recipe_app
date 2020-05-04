@@ -11,21 +11,6 @@ const scraper = new Scraper({
     }
 });
 
-pool
-    .connect()
-    .then(client => {
-        return client
-            .query('select * from lab6')
-            .then(res => {
-                client.release()
-                console.log(res.rows[0])
-            })
-            .catch(err => {
-                client.release()
-                console.log(err.stack)
-            })
-    })
-
 var schema = buildSchema(`
     type Ingredient {
         id: ID
@@ -96,12 +81,12 @@ var root = {
 
 // Run the graphQL server
 var app = express();
-app.use('/graphql', graphqlHTTP({
+app.use('/graphiql', graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
 }));
 
 app.listen(4000);
-console.log("Running a test graphql API server at http://localhost:4000/graphql");
+console.log("Running a test graphql API server at http://localhost:4000/graphiql");
 
