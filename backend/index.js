@@ -2,8 +2,8 @@ var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
-const { Pool } = require('pg');
 const fs = require('fs');
+const pool = require('./pool');
 
 const scraper = new Scraper({
     puppeteer: {
@@ -11,13 +11,20 @@ const scraper = new Scraper({
     }
 });
 
-const pool = new Pool({
-    user: 'olson16',
-    host: 'csinparallel.cs.stolaf.edu',
-    database: 'mca_s20',
-    password: 'PGPASSWORD',
-    port: 5432,
-});
+pool
+    .connect()
+    .then(client => {
+        return client
+            .query('select * from lab6')
+            .then(res => {
+                client.release()
+                console.log(res.rows[0])
+            })
+            .catch(err => {
+                client.release()
+                console.log(err.stack)
+            })
+    })
 
 var schema = buildSchema(`
     type Ingredient {
