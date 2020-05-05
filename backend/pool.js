@@ -35,7 +35,7 @@ pool
     .connect()
     .then(client => {
         return client
-            .query('select * from lab6')
+            .query('select * from my_table')
             .then(res => {
                 client.release()
                 res.rows.forEach((val, i) => {
