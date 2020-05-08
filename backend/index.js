@@ -51,7 +51,22 @@ class Ingredient {
 
 class Recipe {
     constructor (name) {
-        this.testName = name;
+        pool
+            .connect()
+            .then(client => {
+                return client
+                    .query('select * from recipes where name like %$1%', [name])
+                    .then(res => {
+                        client.release()
+                        res.rows.forEach((val, i) => {
+                            console.log("["+i+"]:  ",val);
+                        })
+                    })
+                    .catch(err => {
+                        client.release()
+                        console.log(err.stack)
+                    })
+            })
     }
     id() {
         return 1;
