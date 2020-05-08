@@ -4,14 +4,14 @@ var os = require('os');
 const pool = require('pool');
 
 var app = express();
-app.use(bodyPaerser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/allrecipes', (request, response) => {
     console.log('Got request for all recipes');
     pool.query(`SELECT * FROM recipes`)
         .then(res => {
-            console.log('DB response: ' + res.rows[0]);
-            response.send(res.rows[0]);
+            console.log('DB response: ' + res.rows);
+            response.send(res.rows);
         })
         .catch(err => 
                 setImmediate(() => {
@@ -49,5 +49,7 @@ app.use(function(err, request, response, next) {
 
     response.status(err.status || 500);
 });
+
+app.listen(4001);
 
 module.exports = app;
