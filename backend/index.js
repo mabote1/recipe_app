@@ -2,7 +2,7 @@ var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
-const fs = require('fs');
+//const fs = require('fs');
 const pool = require('./db/pool');
 
 const scraper = new Scraper({
