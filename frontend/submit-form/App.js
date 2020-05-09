@@ -27,7 +27,7 @@ export default class Recipe extends Component {
         formContentType: "application/x-www-form-urlencoded;charset=UTF-8"
      }
     }
-
+/*unfinished and untested*/
     submitRecipe(){
       database('recipe', 'POST', {
         headers: {
@@ -188,7 +188,9 @@ export default class Recipe extends Component {
                           </ScrollView>
                     </View>
                     <View style= {{flex:1,backgroundColor: '#ae59da6', borderWidth: 2,borderColor: '#ae59da6', borderRadius: 5}}>
-                      <Button onPress={() => this.submitRecipe()}
+                      <Button 
+                      //onPress={() => this.submitRecipe()} 
+                      //uncomment onPress when submitRecipe() is complete
                                     title = "Submit"/>
                           </View>
                 </View>
