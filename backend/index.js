@@ -42,6 +42,10 @@ var schema = buildSchema(`
         hello: String
         names: [Names]
     }
+
+    type Mutation {
+        createRecipe(input: RecipeInput): Recipe
+    }
 `);
 
 class Ingredient {
