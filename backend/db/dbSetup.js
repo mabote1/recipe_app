@@ -24,8 +24,8 @@ pool.connect()
                             category text
                         );
                         CREATE TABLE IF NOT EXISTS recipe_ingredients (
-                            recipe_id bigint unsigned references recipes(recipe_id),
-                            ingredient_id bigint unsigned references ingredients(ingredient_id),
+                            recipe_id bigint references recipes(recipe_id),
+                            ingredient_id bigint references ingredients(ingredient_id),
                             amount float NOT NULL,
                             measurement text NOT NULL
                         );
