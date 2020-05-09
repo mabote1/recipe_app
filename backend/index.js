@@ -32,9 +32,15 @@ var schema = buildSchema(`
         serves: Int
     }
 
+    type Names {
+        recipe_id: ID
+        name: String
+    }
+
     type Query {
-        recipe(id: Int, name: String): Recipe
+        recipe(id: Int!,): Recipe
         hello: String
+        names: [Names]
     }
 `);
 
@@ -132,6 +138,12 @@ var root = {
     hello: () => {
         return "Hello, World!";
     },
+    names: () => {
+        return pool.query(`SELECT recipe_id, name FROM recipes`)
+                   .then(res => {
+                       return res.rows;
+                   })
+    }
 };
 
 // Run the graphQL server
@@ -140,6 +152,12 @@ app.use('/graphiql', graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
+}));
+
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: false,
 }));
 
 app.listen(4000);
