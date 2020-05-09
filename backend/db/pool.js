@@ -1,7 +1,11 @@
 const { Pool } = require('pg');
 const fs = require('fs');
+try {
+    var pgpass = fs.readFileSync('db/.pwd');
+} catch (error) {
+    var pgpass = fs.readFileSync('.pwd');
+}
 
-var pgpass = fs.readFileSync(".pwd");
 var username = 'olson16';
 
 const pool = new Pool({
@@ -21,7 +25,6 @@ pool.on('error', (err, client) => {
 
 pool.on('connect', client => {
     client.query(`SET search_path = ${pgschema}, public;`)
-    console.log(`Connected to db mca_s20, schema = ${pgschema}.`)
 })
 
 module.exports = pool;

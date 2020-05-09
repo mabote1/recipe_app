@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var os = require('os');
-const pool = require('pool');
+const pool = require('./pool');
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,6 +17,19 @@ app.get('/allrecipes', (request, response) => {
                 setImmediate(() => {
                     throw err;
                 }));
+})
+
+app.get('/allrecipenames', (request, response) => {
+    console.log('Got request for all recipe names');
+    pool.query(`SELECT name, recipe_id FROM recipes;`)
+        .then(res => {
+            console.log('DB response: ' + res.rows);
+            response.send(res.rows);
+        })
+        .catch(err => 
+            setImmediate(() => {
+                throw err;
+            }));
 })
 
 app.post('/addrecipe', (request, response) => {
@@ -51,5 +64,6 @@ app.use(function(err, request, response, next) {
 });
 
 app.listen(4001);
+console.log("Listening to port 4001")
 
 module.exports = app;

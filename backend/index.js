@@ -15,7 +15,7 @@ var schema = buildSchema(`
     type Ingredient {
         id: ID
         name: String!
-        amount: Int!
+        amount: Float!
         measurement: String!
         category: String!
     }
@@ -23,71 +23,111 @@ var schema = buildSchema(`
     type Recipe {
         id: ID
         name: String!
+        author: String
+        description: String!
+        category: String
+        calories: Int
         ingredients: [Ingredient!]
         image: String
         serves: Int
     }
 
     type Query {
-        recipe(name: String): Recipe
+        recipe(id: Int, name: String): Recipe
         hello: String
     }
 `);
 
 class Ingredient {
+    constructor (id, name, category, amount, measurement) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.amount = amount;
+        this.measurement = measurement;
+    }
     id() {
-        return 1;
+        return this.id;
     }
     name() {
-        return "Flour"
+        return this.name;
+    }
+    category() {
+        return this.category;
     }
     amount() {
-        return 2;
+        return this.amount;
     }
     measurement() {
-        return "Cup(s)";
+        return this.measurement;
     }
 }
 
 class Recipe {
-    constructor (name) {
-        pool
-            .connect()
-            .then(client => {
-                return client
-                    .query('select * from recipes where name like %$1%', [name])
-                    .then(res => {
-                        client.release()
-                        res.rows.forEach((val, i) => {
-                            console.log("["+i+"]:  ",val);
-                        })
-                    })
-                    .catch(err => {
-                        client.release()
-                        console.log(err.stack)
-                    })
-            })
+    constructor (id) {
+        this.pool = pool;
+        this.id = id;
     }
     id() {
-        return 1;
+        return this.id;
     }
     name() {
-        return this.testName;
+        return this.pool.query(`SELECT name FROM recipes WHERE recipe_id = $1`,[this.id])
+                   .then(res => {
+                       return res.rows[0].name;
+                   })
+    }
+    author() {
+        return this.pool.query(`SELECT author FROM recipes WHERE recipe_id = $1`,[this.id])
+                   .then(res => {
+                       return res.rows[0].author;
+                   })
+    }
+    description() {
+        return this.pool.query(`SELECT description FROM recipes WHERE recipe_id = $1`,[this.id])
+                   .then(res => {
+                       return res.rows[0].description;
+                   })
+    }
+    category() {
+        return this.pool.query(`SELECT category FROM recipes WHERE recipe_id = $1`,[this.id])
+                   .then(res => {
+                       return res.rows[0].category;
+                   })
+    }
+    serves() {
+        return this.pool.query(`SELECT serves FROM recipes WHERE recipe_id = $1`,[this.id])
+                   .then(res => {
+                       return res.rows[0].serves;
+                   })
     }
     ingredients() {
-        let ings = [];
-        ings[0] = new Ingredient();
-        ings[1] = new Ingredient();
-        return ings;
+        return this.pool.query(`
+        SELECT i.ingredient_id, i.name, i.category, ri.amount, ri.measurement
+        FROM ingredients i, recipe_ingredients ri
+        WHERE i.ingredient_id = ri.ingredient_id AND ri.recipe_id = $1
+        `, [this.id])
+        .then(res => {
+            let ings = [];
+            res.rows.forEach((val, i) => {
+                let ing_id = val.ingredient_id;
+                let name = val.name;
+                let category = val.category;
+                let amount = val.amount;
+                let measurement = val.measurement;
+                ings[i] = new Ingredient(ing_id, name, category, amount, measurement);
+            })
+            return ings;
+        })
     }
     image(){
-        return "image.url.thing"
+        return "placeholder.image.url"
     }
 }
 
 var root = {
-    recipe: ({name}) => {
-        return new Recipe(name);
+    recipe: ({id}) => {
+        return new Recipe(id);
     },
     hello: () => {
         return "Hello, World!";
