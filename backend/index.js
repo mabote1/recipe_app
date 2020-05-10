@@ -201,7 +201,8 @@ var root = {
             input.ingredients.forEach((val, i) => {
                 pool.query(`
                 INSERT INTO ingredients (name, category)
-                VALUES ($1, $2) RETURNING ingredient_id
+                VALUES ($1, $2) ON CONFLICT ("name") DO
+                UPDATE SET name=EXCLUDED.name RETURNING ingredient_id
                 `,[val.name, val.category])
                 .then(res => {
                     ingredient_id = res.rows[0].ingredient_id

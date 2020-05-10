@@ -21,7 +21,7 @@ pool.connect()
                         );
                         CREATE TABLE IF NOT EXISTS ingredients (
                             ingredient_id serial primary key,
-                            name text,
+                            name text unique,
                             category text
                         );
                         CREATE TABLE IF NOT EXISTS recipe_ingredients (
