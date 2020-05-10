@@ -17,15 +17,15 @@ let directions = `Step 1: Build the database table,
 //     })
 
 let dbq = `
-SELECT i.name, ri.amount, ri.measurement, i.category 
-FROM ingredients i, recipe_ingredients ri 
+SELECT i.ingredient_name, ri.amount, ri.measurement, i.category, i.ingredient_id, r.recipe_name 
+FROM ingredients i, recipe_ingredients ri, recipes r
 WHERE ri.ingredient_id = i.ingredient_id
 `
 
 pool
     .query(dbq)
     .then(res => {
-        console.log(res.rows);
+        res.rows.forEach((val) => {console.log(val.recipe_name,val.ingredient_id,val.ingredient_name)});
     })
 
 // pool

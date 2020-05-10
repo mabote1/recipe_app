@@ -45,9 +45,9 @@ class Recipe {
         return this.id;
     }
     name() {
-        return this.pool.query(`SELECT name FROM recipes WHERE recipe_id = $1`,[this.id])
+        return this.pool.query(`SELECT recipe_name FROM recipes WHERE recipe_id = $1`,[this.id])
                    .then(res => {
-                       return res.rows[0].name;
+                       return res.rows[0].recipe_name;
                    })
     }
     author() {
@@ -82,7 +82,7 @@ class Recipe {
     }
     ingredients() {
         return this.pool.query(`
-        SELECT i.ingredient_id, i.name, i.category, ri.amount, ri.measurement
+        SELECT i.ingredient_id, i.ingredient_name, i.category, ri.amount, ri.measurement
         FROM ingredients i, recipe_ingredients ri
         WHERE i.ingredient_id = ri.ingredient_id AND ri.recipe_id = $1
         `, [this.id])
@@ -90,7 +90,7 @@ class Recipe {
             let ings = [];
             res.rows.forEach((val, i) => {
                 let ing_id = val.ingredient_id;
-                let name = val.name;
+                let name = val.ingredient_name;
                 let category = val.category;
                 let amount = val.amount;
                 let measurement = val.measurement;
@@ -171,7 +171,7 @@ var schema = buildSchema(`
 
     type Names {
         recipe_id: ID
-        name: String
+        recipe_name: String
     }
 
     type Query {
@@ -193,16 +193,16 @@ var root = {
         let recipe_id = 0;
         let ingredient_id = 0;
         recipe_id = pool.query(`
-        INSERT INTO recipes (name, author, description, category, calories, directions, serves)
+        INSERT INTO recipes (recipe_name, author, description, category, calories, directions, serves)
         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING recipe_id
         `,[input.name, input.author, input.description, input.category, input.calories, input.directions, input.serves])
         .then(res => {
             recipe_id = res.rows[0].recipe_id;
             input.ingredients.forEach((val, i) => {
                 pool.query(`
-                INSERT INTO ingredients (name, category)
-                VALUES ($1, $2) ON CONFLICT ("name") DO
-                UPDATE SET name=EXCLUDED.name RETURNING ingredient_id
+                INSERT INTO ingredients (ingredient_name, category)
+                VALUES ($1, $2) ON CONFLICT ("ingredient_name") DO
+                UPDATE SET ingredient_name=EXCLUDED.ingredient_name RETURNING ingredient_id
                 `,[val.name, val.category])
                 .then(res => {
                     ingredient_id = res.rows[0].ingredient_id
@@ -222,7 +222,7 @@ var root = {
         return "Hello, World!";
     },
     names: () => {
-        return pool.query(`SELECT recipe_id, name FROM recipes`)
+        return pool.query(`SELECT recipe_id, recipe_name FROM recipes`)
                    .then(res => {
                        return res.rows;
                    })
