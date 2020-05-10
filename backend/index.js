@@ -11,43 +11,6 @@ const scraper = new Scraper({
     }
 });
 
-var schema = buildSchema(`
-    type Ingredient {
-        id: ID
-        name: String!
-        amount: Float!
-        measurement: String!
-        category: String!
-    }
-
-    type Recipe {
-        id: ID
-        name: String!
-        author: String
-        description: String!
-        category: String
-        calories: Int
-        ingredients: [Ingredient!]
-        image: String
-        serves: Int
-    }
-
-    type Names {
-        recipe_id: ID
-        name: String
-    }
-
-    type Query {
-        recipe(id: Int!,): Recipe
-        hello: String
-        names: [Names]
-    }
-
-    type Mutation {
-        createRecipe(input: RecipeInput): Recipe
-    }
-`);
-
 class Ingredient {
     constructor (id, name, category, amount, measurement) {
         this.id = id;
@@ -105,6 +68,12 @@ class Recipe {
                        return res.rows[0].category;
                    })
     }
+    calories() {
+        return this.pool.query(`SELECT calories FROM recipes WHERE recipe_id = $1`,[this.id])
+        .then(res => {
+            return res.rows[0].calories;
+        })
+    }
     serves() {
         return this.pool.query(`SELECT serves FROM recipes WHERE recipe_id = $1`,[this.id])
                    .then(res => {
@@ -135,9 +104,118 @@ class Recipe {
     }
 }
 
+class RecipeInput {
+    constructor(id, {name, author, description, directions, category, calories, image, serves, ingredients}){
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.description = description;
+        this.directions = directions;
+        this.category = category;
+        this.calories = calories;
+        this.image = image;
+        this.serves = serves;
+        this.ingredients = ingredients;
+    }
+    id(){return this.id;}
+    name(){return this.name;}
+    author(){return this.author;}
+    description(){return this.description;}
+    directions(){return this.directions;}
+    category(){return this.category;}
+    calories(){return this.calories;}
+    image(){return this.image;}
+    serves(){return this.serves;}
+    ingredients(){return this.ingredients;}
+}
+
+var schema = buildSchema(`
+    input RecipeInput {
+        name: String!
+        author: String
+        description: String!
+        directions: String!
+        category: String
+        calories: Int
+        image: String
+        serves: Int
+        ingredients: [IngredientInput!]
+    }
+
+    input IngredientInput {
+        name: String!
+        amount: Float!
+        measurement: String!
+        category: String
+    }
+
+    type Ingredient {
+        id: ID
+        name: String!
+        amount: Float!
+        measurement: String!
+        category: String!
+    }
+
+    type Recipe {
+        id: ID
+        name: String!
+        author: String
+        description: String!
+        category: String
+        calories: Int
+        ingredients: [Ingredient!]
+        image: String
+        serves: Int
+    }
+
+    type Names {
+        recipe_id: ID
+        name: String
+    }
+
+    type Query {
+        recipe(id: Int!): Recipe
+        hello: String
+        names: [Names]
+    }
+
+    type Mutation {
+        createRecipe(input: RecipeInput): Recipe
+    }
+`);
+
 var root = {
     recipe: ({id}) => {
         return new Recipe(id);
+    },
+    createRecipe: ({input}) => {
+        let recipe_id = 0;
+        let ingredient_id = 0;
+        recipe_id = pool.query(`
+        INSERT INTO recipes (name, author, description, category, calories, directions, serves)
+        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING recipe_id
+        `,[input.name, input.author, input.description, input.category, input.calories, input.directions, input.serves])
+        .then(res => {
+            recipe_id = res.rows[0].recipe_id;
+            input.ingredients.forEach((val, i) => {
+                pool.query(`
+                INSERT INTO ingredients (name, category)
+                VALUES ($1, $2) RETURNING ingredient_id
+                `,[val.name, val.category])
+                .then(res => {
+                    ingredient_id = res.rows[0].ingredient_id
+                })
+                .then(res => {
+                    pool.query(`
+                    INSERT INTO recipe_ingredients (recipe_id, ingredient_id, amount, measurement)
+                    VALUES ($1, $2, $3, $4) RETURNING *
+                    `,[recipe_id, ingredient_id, val.amount, val.measurement])
+                })
+            })
+            return recipe_id;
+        })
+        return new RecipeInput(recipe_id, input);
     },
     hello: () => {
         return "Hello, World!";

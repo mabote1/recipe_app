@@ -16,7 +16,8 @@ pool.connect()
                             description text NOT NULL,
                             category text,
                             calories int,
-                            directions text NOT NULL                  
+                            directions text NOT NULL,
+                            serves int
                         );
                         CREATE TABLE IF NOT EXISTS ingredients (
                             ingredient_id serial primary key,
