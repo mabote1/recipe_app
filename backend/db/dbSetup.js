@@ -11,7 +11,7 @@ pool.connect()
                 .query(`DROP TABLE IF EXISTS recipe_ingredients, ingredients, recipes;
                         CREATE TABLE IF NOT EXISTS recipes (
                             recipe_id serial primary key,
-                            name text NOT NULL,
+                            recipe_name text NOT NULL,
                             author text,
                             description text NOT NULL,
                             category text,
@@ -21,7 +21,7 @@ pool.connect()
                         );
                         CREATE TABLE IF NOT EXISTS ingredients (
                             ingredient_id serial primary key,
-                            name text unique,
+                            ingredient_name text unique,
                             category text
                         );
                         CREATE TABLE IF NOT EXISTS recipe_ingredients (
