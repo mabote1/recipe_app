@@ -145,14 +145,6 @@ export default class Recipe extends Component {
   // });
       return (
         <View style={styles.container}>
-
-                        	{/*added navigation section*/}
-        <View style={{paddingTop: 1, paddingBottom: 1}}/>   
-        <Button title="Add Recipe"
-                onPress={() => this.props.navigation.navigate('Add Recipe')}/>
-        <Button title="Home"
-                onPress={() => this.props.navigation.navigate('Home')}/>
-
             <View style = {[{flex:1}, styles.navigationContainer]}>
               <Text style={styles.headerStyle}>Add a Recipe!</Text>
               <Image style={styles.navImage}
