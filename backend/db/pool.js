@@ -7,7 +7,13 @@ lib.setErrorPrefix(__filename);  // set label for lib error messages
 // database connection parameters
 const dbHost = "csinparallel.cs.stolaf.edu";
 const username = 'mabote1';    // CHANGE to your username, e.g., jones1
-const password = lib.getPGPassword(dbHost);  // uncomment for Windows
+
+var password = '';
+try {
+    password = lib.getPGPassword(dbHost);  // uncomment for Windows
+} catch {
+    password = fs.readFileSync('db/.pwd', {encoding:'utf8'});
+}
 const dbName = 'mca_s20';
 const schema = 'mabote1';  // CHANGE to your username as schema for Lab 5
                        // CHANGE to team schema for project
