@@ -1,3 +1,5 @@
+/* DEPRECATED - DO NOT USE, SCHEDULED FOR UPDATE */
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var os = require('os');
@@ -35,6 +37,9 @@ app.get('/allrecipenames', (request, response) => {
 app.post('/addrecipe', (request, response) => {
     console.log('Got request to add a new recipe');
     let name = request.body.name;
+    let author = request.body.author;
+    let description = request.body.description;
+    let serves = request.body.serves;
     let category = request.body.category;
     let calories = request.body.calories;
     let directions = request.body.directions;
