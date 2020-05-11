@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import HomeScreen from './HomeScreen';
 import AddRecipe from './AddRecipe';
+import App from './button_frontend/App';
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,7 @@ export default class Nav extends Component {
               <Stack.Navigator>
                 <Stack.Screen name="Home" component={HomeScreen}/>
                 <Stack.Screen name="Add Recipe" component={AddRecipe} />
+                <Stack.Screen name="Button" component={App} />
               </Stack.Navigator>
             </NavigationContainer>
         );
