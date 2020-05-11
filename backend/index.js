@@ -182,12 +182,22 @@ var schema = buildSchema(`
 
     type Mutation {
         createRecipe(input: RecipeInput): Recipe
+        deleteRecipeByID(id: ID): ID
     }
 `);
 
 var root = {
     recipe: ({id}) => {
         return new Recipe(id);
+    },
+    deleteRecipeByID: ({id}) => {
+        return pool.query(`
+        DELETE FROM recipe_ingredients WHERE recipe_id = $1
+        `,[id])
+        .then(pool.query(`
+        DELETE FROM recipes WHERE recipe_id = $1
+        `,[id]))
+        .then(res => {return id})
     },
     createRecipe: ({input}) => {
         let recipe_id = 0;
