@@ -124,8 +124,10 @@ const pool = new Pool({
     port: 5432,
 });
 
+var pgschema = 'mca_s20_recipe, mabote1'
+
 pool.on('connect', client => {
-    client.query(`SET search_path = ${schema}, public;`)
+    client.query(`SET search_path = ${pgschema}, public;`)
 });
 
 pool.on('error', (err, client) => {
