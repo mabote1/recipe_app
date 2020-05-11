@@ -4,8 +4,8 @@
   "description": "Backend for GRUT project",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "prod": "node index.js"
+    "dev": "SET NODE_ENV=dev&& nodemon index.js",
+    "prod": "SET NODE_ENV=prod&& node index.js"
   },
   "author": "GRUT Team",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "fs": "0.0.1-security",
     "graphql": "^15.0.0",
     "images-scraper": "^5.0.5",
-    "pg": "^8.0.3"
+    "pg": "^8.0.3",
+    "prompt-sync": "^4.2.0"
   }
 }
