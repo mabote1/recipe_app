@@ -62,6 +62,7 @@ export default class Recipe extends Component {
 
         let ingredients = this.state.ingredients.map((item, key) => {
           //item.id = this.state.ingredients[key].id;
+          delete this.state.ingredients[key].id;
           item.name = this.state.ingredients[key].name.trim();
           if (this.state.proportions[key].howMuch != undefined){
             var ingr_string = this.state.proportions[key].howMuch.trim().split(' ');
@@ -130,7 +131,7 @@ export default class Recipe extends Component {
         // if (trimmed_ingredients.length == 0){
         //   throw "Error: no data to send";
         // }
-        fetch('http://localhost:4000/graphql', {
+        fetch('http://10.0.0.110:4000/graphql', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

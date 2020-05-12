@@ -26,6 +26,11 @@ try {
 } catch {
     password = fs.readFileSync('db/.pwd', {encoding:'utf8'});
 }
+
+password = password.trim();
+
+console.log(`Password set to ${password.substr(0,4)}********************`);
+
 const dbName = 'mca_s20';
 
 const pool = new Pool({
