@@ -15,6 +15,8 @@ export default class HomeScreen extends Component {
                       onPress={() => this.props.navigation.navigate('Add Recipe')}/>
               <Button title="Button"
                       onPress={() => this.props.navigation.navigate('Button')}/>
+              <Button title="Recipe RESTful"
+                      onPress={() => this.props.navigation.navigate('Recipe RESTful')}/>
             </View>
           </View>
         );
