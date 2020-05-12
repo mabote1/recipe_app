@@ -162,6 +162,7 @@ var schema = buildSchema(`
         name: String!
         author: String
         description: String!
+        directions: String
         category: String
         calories: Int
         ingredients: [Ingredient!]
