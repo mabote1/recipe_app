@@ -6,7 +6,7 @@ export default class Recipe extends Component {
       super(props);
       this.state = {
         name: '',
-        category: '', //italian, chinese, latin...
+        category: '', 
         calories: '',
         directions: '',
         ingredients: [
@@ -24,34 +24,137 @@ export default class Recipe extends Component {
         iid: 1,
         hmid: 1,
         url: "127.0.0.1:4001",
-        formContentType: "application/x-www-form-urlencoded;charset=UTF-8"
+        formContentType: "application/x-www-form-urlencoded;charset=UTF-8",
+        measurementDictionary: [
+          "tbsp",
+          "cup",
+          "cups",
+          "tsp",
+          "gallon",
+          "gallons"
+        ]
      }
     }
-/*unfinished and untested*/
-    submitRecipe(){
-      database('recipe', 'POST', {
-        headers: {
-          "Content-type": this.state.formContentType
-        },
-        body: `name=${this.state.name}category=${this.state.category}calories=${this.state.calories}directions=${this.state.directions}`
-      });
+    handlePress = () => {
+              /* Example of Mutation */
+        let query = `
+        mutation CreateMessage($input: RecipeInput){
+            createRecipe(input: $input) {
+                id
+                name
+            }      
+          }`
+        let name = this.state.name
+        let author = "Parameter not in use"
+        let description = "Parameter not in use"
+        let category = "Parameter not in use"
+        let directions = this.state.directions
+        let serves = 0
+        let calories = parseInt(this.state.calories)
+        //THIS IS THE STRUCTURE OF OUR INGREDIENT OBJECT
+        // let flour = {
+        //   "amount": 0.75,
+        //   "category": "Dry",
+        //   "id": 0,
+        //   "measurement": "Cups",
+        //   "name": "Flour"
+        // }
 
+        let ingredients = this.state.ingredients.map((item, key) => {
+          //item.id = this.state.ingredients[key].id;
+          item.name = this.state.ingredients[key].name.trim();
+          if (this.state.proportions[key].howMuch != undefined){
+            var ingr_string = this.state.proportions[key].howMuch.trim().split(' ');
+          }else{
+            item.amount = 0;
+            item.measurement = "";
+            return item;
+          }
+          if (ingr_string.length == 1){
+            let num = parseInt(ingr_string[0]);
+              if (num == NaN){
+                console.log("NaN");
+                item.amount = 0;
+              }else{
+                console.log("Num assigned");
+                item.amount = num;
+              } 
+            item.measurement = "";
+            item.category = "not in use";
+          }
+          console.log(ingr_string);
+          if (ingr_string.length > 2 || ingr_string.length < 1){
+            console.log("Error: invalid number of arguments in howMuch: " + key);
+            item.amount = 0;
+            item.measurement = "";
+          }
+          for (let i =0; i< ingr_string.length; i++){
+            if (i == 0){ // index 0 should be an integer 
+              let num = parseInt(ingr_string[i]);
+              if (num == NaN){
+                console.log("NaN");
+                item.amount = 0;
+              }else{
+                console.log("Num assigned");
+                item.amount = num;
+              } 
+            }else if (i==1){ // index 1 should be a measurement
+                ingr_string[i] = ingr_string[i].toLowerCase();
+                var measurement_is_set = 0;
+                for (let y =0; y<this.state.measurementDictionary.length; y ++){
+                    if (ingr_string[i] == this.state.measurementDictionary[y]){
+                      item.measurement = ingr_string[i];
+                      measurement_is_set = 1;
+                    }
+                }
+                if (measurement_is_set == 0){
+                  console.log("invalid measurement!");
+                  item.measurement = "";
+                }
+            }
+          }
+          item.category = "parameter not in use";
+          return item;
+        });
+        console.log("ingredients");
+        console.log(ingredients);
+        console.log("end");
+        var trimmed_ingredients = [];
+        for (var i=0;i<ingredients.length;i++){
+          if (ingredients[i].amount + "" == "NaN" || ingredients[i].amount == 0 || ingredients[i].name == undefined || ingredients[i].name == ""){
+            continue;
+          }
+          trimmed_ingredients.push(ingredients[i]);
+        }
+        console.log(trimmed_ingredients); 
+        // if (trimmed_ingredients.length == 0){
+        //   throw "Error: no data to send";
+        // }
+        fetch('http://localhost:4000/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query,
+                variables: {
+                    input: {
+                        name,
+                        author,
+                        description,
+                        category,
+                        calories,
+                        directions,
+                        serves,
+                        ingredients
+                    }
+                }
+            })
+        })
+        .then(res => res.json())
+        .then(data => console.log(data));
     }
-    database = (op, method = '', params = {}) => {
-      if (method != '')
-          params.method = method;
-      fetch(this.state.url + '/'+op, params)
-          .then((response) => response.text())
-          .then((responseText) => {
-              alert(`
-                  Sent:  op=${JSON.stringify(op)}\nparams+method=${
-    JSON.stringify(params)}\n
-                  Received:  ${responseText}`);
-          })
-          .catch((error) => {
-              console.error(error);
-          });
-  }
     updateIngredients = (text, key) => {
       this.setState(state => {
         const ingredients = state.ingredients.map((item, j) =>{
@@ -62,7 +165,7 @@ export default class Recipe extends Component {
               return item;
           }
         });
-        console.log(this.state.ingredients);
+        //console.log(this.state.ingredients);
           return {
             ingredients,
           };
@@ -78,7 +181,7 @@ export default class Recipe extends Component {
               return item;
           }
         });
-        console.log(this.state.proportions);
+        //console.log(this.state.proportions);
           return {
             proportions,
           };
@@ -90,18 +193,18 @@ export default class Recipe extends Component {
       this.addHowMuch();
     }
     addIngredient = () =>{
-      console.log("state iid: " + this.state.iid);
+      //console.log("state iid: " + this.state.iid);
       let newIngredient = {id: this.state.iid, name: "" }
-      console.log("new ingredient id: " + newIngredient.id);
+      //console.log("new ingredient id: " + newIngredient.id);
       this.setState({ingredients: [...this.state.ingredients, newIngredient]}, () =>
       {
         this.state.iid = this.state.iid + 1;
       });
     }
     addHowMuch = () => {
-      console.log("state hmid: " + this.state.hmid);
+      //console.log("state hmid: " + this.state.hmid);
       let newProportion = {id: this.state.hmid, name: "" }
-      console.log("new proportion id: " + newProportion.id);
+      //console.log("new proportion id: " + newProportion.id);
       this.setState({proportions: [...this.state.proportions, newProportion]}, () =>
       {
         this.state.hmid = this.state.hmid + 1;
@@ -130,19 +233,6 @@ export default class Recipe extends Component {
           );
        }
     });
-  //   let newProportionArray = this.state.proportions.map( (item, key) => {
-  //     if ( (key) == item.id){
-  //       return(
-  //           <TextInput
-  //           style={[styles.textBorder,{marginTop: 10,
-  //             backgroundColor: "#fff"}]}
-  //           placeholder="how much?"
-  //           onChangeText={(name) => this.updateProportions(name, key)}
-  //           value={this.state.proportions[item.id].howMuch}
-  //           />
-  //       );
-  //    }
-  // });
       return (
         <View style={styles.container}>
 
@@ -197,8 +287,7 @@ export default class Recipe extends Component {
                     </View>
                     <View style= {{flex:1,backgroundColor: '#ae59da6', borderWidth: 2,borderColor: '#ae59da6', borderRadius: 5}}>
                       <Button
-                      //onPress={() => this.submitRecipe()}
-                      //uncomment onPress when submitRecipe() is complete
+                      onPress={() => this.handlePress()}
                                     title = "Submit"/>
                           </View>
                 </View>
