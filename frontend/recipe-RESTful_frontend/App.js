@@ -102,8 +102,7 @@ export default class ButtonClient extends Component {
                 />
                 <TextInput
                   style={{margin: 5, paddingLeft: 10,
-                    borderStyle: 'solid', borderWidth: 2, }}
-                  //keyboardType="integer"
+                  borderStyle: 'solid', borderWidth: 2, }}
                   placeholder="calories to add"
                   onChangeText={(calories) => this.setState({calories})}
                   value={this.state.calories}
