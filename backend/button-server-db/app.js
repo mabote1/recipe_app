@@ -19,7 +19,7 @@ app.get('/', (request, response) => {
     console.log(`Got request for count, sending ${count}`);
     pool.query('SELECT count FROM button_count')
 	.then(res => {
-	    console.log('DB response: ' + res.rows[0]);
+	    console.log('DB response: ' + JSON.stringify(res.rows[0]));
 	    response.send(res.rows[0]);
 	})
 	.catch(err =>
@@ -33,9 +33,9 @@ app.get('/', (request, response) => {
 app.put('/', (request, response) => {
     // count++;
     console.log(`Got request to increment count, will add 1 in database`);
-    pool.query('UPDATE button_count SET count = count + 1')
+    pool.query('UPDATE button_count SET count = count + 1 RETURNING button_count')
 	.then(res => {
-	    console.log('DB response: ' + res.rows[0]);
+	    console.log('DB response: ' + res.rows[0].button_count);
 	    response.sendStatus(200)
 	})
 	.catch(err =>
@@ -71,9 +71,9 @@ app.post('/names', (request, response) => {
     console.log(request.body)
     console.log(request.body.name)
     console.log(`Got request to add a name, will add ${name} to database`);
-    pool.query('INSERT INTO button_names (name) VALUES ($1)', [name])
+    pool.query('INSERT INTO button_names (name) VALUES ($1) RETURNING name', [name])
 	.then(res => {
-	    console.log('DB response: ' + res.rows[0]);
+	    console.log('DB response: ' + res.rows[0].name);
 	    response.sendStatus(200)
 	})
 	.catch(err =>
