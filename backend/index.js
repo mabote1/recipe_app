@@ -2,7 +2,7 @@ var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
-//const fs = require('fs');
+require('dotenv').config();
 const pool = require('./db/pool');
 
 const scraper = new Scraper({
@@ -254,6 +254,6 @@ app.use('/graphql', graphqlHTTP({
     graphiql: false,
 }));
 
-app.listen(4000);
-console.log("Running a test graphql API server at http://localhost:4000/graphiql");
+app.listen(process.env.GRAPHQL_PORT);
+console.log(`Running a test graphql API server at http://localhost:${process.env.GRAPHQL_PORT}/graphiql`);
 

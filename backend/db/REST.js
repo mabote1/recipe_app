@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var os = require('os');
 const pool = require('./pool');
+require('dotenv').config();
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -68,7 +69,7 @@ app.use(function(err, request, response, next) {
     response.status(err.status || 500);
 });
 
-app.listen(4001);
-console.log("Listening to port 4001")
+app.listen(process.env.REST_PORT);
+console.log("Listening to port ",process.env.REST_PORT)
 
 module.exports = app;
