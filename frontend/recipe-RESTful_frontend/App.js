@@ -8,13 +8,13 @@ export default class ButtonClient extends Component {
             url: 'http://192.168.1.20:3001',
             formContentType: "application/x-www-form-urlencoded;charset=UTF-8", 
             name: ' ',
-            recipe_name: 'pi',
-            author: 'Thab',
-            description: 'This tasty cake is so tasty',
-            serves: '3',
-            category: 'Bakery',
-            calories: '200',
-            directions: 'No directions'
+            recipe_name: '',
+            author: '',
+            description: '',
+            serves: '',
+            category: '',
+            calories: '',
+            directions: ''
 	};
     }
 
