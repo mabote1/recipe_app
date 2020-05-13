@@ -1,5 +1,3 @@
-/* DEPRECATED - DO NOT USE, SCHEDULED FOR UPDATE */
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var os = require('os');
@@ -12,7 +10,7 @@ app.get('/allrecipes', (request, response) => {
     console.log('Got request for all recipes');
     pool.query(`SELECT * FROM recipes`)
         .then(res => {
-            console.log('DB response: ' + res.rows);
+            console.log('DB response: ' + JSON.stringify(res.rows));
             response.send(res.rows);
         })
         .catch(err => 
@@ -23,9 +21,9 @@ app.get('/allrecipes', (request, response) => {
 
 app.get('/allrecipenames', (request, response) => {
     console.log('Got request for all recipe names');
-    pool.query(`SELECT recipe_id, recipe_name FROM recipes;`)
+    pool.query(`SELECT recipe_name,description,directions FROM recipes;`)
         .then(res => {
-            console.log('DB response: ' + res.rows);
+            console.log('DB response: ' + JSON.stringify(res.rows));
             response.send(res.rows);
         })
         .catch(err => 
@@ -51,18 +49,18 @@ app.post('/addrecipe', (request, response) => {
     console.log(request.body.category)
     console.log(request.body.calories)
     console.log(request.body.directions)
-    //let ingredients = request.body.ingredients;
+    //let ingredients = request.body.ingredients;return new Promise(function (resolve, reject){
     pool.query(`INSERT INTO recipes (recipe_name, author, description,
-        category, calories, directions, serves) VALUES($1, $2, $3, $4, $5, $6, $7)`, [recipe_name, author, description,
+        category, calories, directions, serves) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [recipe_name, author, description,
         category, calories, directions, serves])
         .then(res => {
-            console.log('DB response: ' + res.rows[0]);
-            console.log('DB response: ' + res.rows[1]);
-            console.log('DB response: ' + res.rows[2]);
-            console.log('DB response: ' + res.rows[3]);
-            console.log('DB response: ' + res.rows[4]);
-            console.log('DB response: ' + res.rows[5]);
-            console.log('DB response: ' + res.rows[6]);
+            console.log('DB response: ' + res.rows[0].recipe_name);
+            console.log('DB response: ' + res.rows[0].author);
+            console.log('DB response: ' + res.rows[0].description);
+            console.log('DB response: ' + res.rows[0].category);
+            console.log('DB response: ' + res.rows[0].calories);
+            console.log('DB response: ' + res.rows[0].directions);
+            console.log('DB response: ' + res.rows[0].serves);
             response.sendStatus(200);
         })
         .catch(err => 
