@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, View, Text, TextInput} from 'react-native';
+import { Button, View, Text, TextInput, StyleSheet} from 'react-native';
 
 export default class ButtonClient extends Component {
     constructor(props) {
@@ -29,7 +29,13 @@ export default class ButtonClient extends Component {
     
     render(){
         return(
-            <View style={{paddingTop: 50, paddingLeft: 50 }}>
+            <View style={{
+                marginTop: 60,
+                flex: 1,
+                backgroundColor: "#fff",
+                paddingLeft: 20,
+                paddingRight: 20
+              }}>
               <Text>Test Program for Button Server</Text>
               {/* Comment: The empty View below is for vertical spacing */}
               <View style={{padding: 5}}/>   
@@ -89,3 +95,60 @@ export default class ButtonClient extends Component {
     }
 }
 
+/*const styles = StyleSheet.create({
+    text: {
+      color: '#4f603c'
+   },
+    container: {
+      marginTop: 60,
+      flex: 1,
+      backgroundColor: "#fff",
+      paddingLeft: 20,
+      paddingRight: 20
+    },
+    headerStyle: {
+      fontSize: 24,
+      textAlign: 'center',
+      fontWeight: '200',
+      paddingTop: 25
+    },
+    elementsContainer: {
+      backgroundColor: '#fff',
+      paddingLeft: 25,
+      paddingRight: 25
+    },
+    navContainer: {
+      backgroundColor: '#a59da6',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      justifyContent: 'space-around',
+      paddingTop: 10,
+      paddingBottom: 10
+    },
+    navImage: {
+      width:100,
+      height:90
+    },
+    formStyle: {
+      backgroundColor: '#a59da6',
+      margin: 10,
+      padding:5,
+      borderWidth : 2,
+      borderColor: '#a59da6',
+      borderRadius: 5
+    },
+    textBorder: {
+      borderWidth: 2,
+      borderColor: '#fff',
+      borderRadius: 5
+    },
+    containerBorder:{
+      borderWidth: 2,
+      borderColor: '#a59da6',
+      borderRadius: 5
+    },
+    rowStyle: {
+      flexDirection: 'row',
+      justifyContent: 'space-around'
+    }
+  });*/
