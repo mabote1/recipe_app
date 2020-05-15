@@ -1,9 +1,6 @@
 // ONLY RUN THIS ONCE!!!
 
-
 const pool = require('./pool');
-
-pool.query('SELECT * FROM lab6')
 
 pool.connect()
     .then(client => {

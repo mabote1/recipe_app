@@ -2,7 +2,6 @@ var express = require('express');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
-//const fs = require('fs');
 const pool = require('./db/pool');
 
 const scraper = new Scraper({
@@ -198,7 +197,7 @@ var root = {
         .then(pool.query(`
         DELETE FROM recipes WHERE recipe_id = $1
         `,[id]))
-        .then(res => {return id})
+        .then(res => {return id;})
     },
     createRecipe: ({input}) => {
         let recipe_id = 0;

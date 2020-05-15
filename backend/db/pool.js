@@ -1,37 +1,10 @@
 const { Pool } = require('pg');
 const fs = require('fs');
-const prompt = require('prompt-sync')();
 
-const lib = require('./mcalib');
-lib.setErrorPrefix(__filename);  // set label for lib error messages
-
-// database connection parameters
-const dbHost = "csinparallel.cs.stolaf.edu";
-
-console.log(`Hello! Running in ${process.env.NODE_ENV} mode.`)
-
-var username = '';
-
-if(process.env.NODE_ENV === "prod"){
-    username = prompt('Enter your DB Username: ') || 'mabote1';
-}
-else {
-    username = 'mabote1'
-}
-console.log(`Username set to ${username}`);
-
-var password = '';
-try {
-    password = lib.getPGPassword(dbHost);  // uncomment for Windows
-} catch {
-    password = fs.readFileSync('db/.pwd', {encoding:'utf8'});
-}
-
-password = password.trim();
-
-console.log(`Password set to ${password.substr(0,4)}********************`);
-
-const dbName = 'mca_s20';
+var username = 'pi';
+var password = fs.readFileSync('db/.pwd');
+var dbHost = '10.0.0.43';
+var dbName = 'recipe';
 
 const pool = new Pool({
     user: username,
@@ -41,17 +14,9 @@ const pool = new Pool({
     port: 5432,
 });
 
-
-
-var pgschema = 'mca_s20_recipe, olson16'
-
 pool.on('error', (err, client) => {
     console.error('Error on idle client', err)
     process.exit(-1)
-})
-
-pool.on('connect', client => {
-    client.query(`SET search_path = ${pgschema}, public;`)
 })
 
 module.exports = pool;
