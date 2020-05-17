@@ -23,7 +23,7 @@ export default class Recipe extends Component {
         ],
         iid: 1,
         hmid: 1,
-        url: "127.0.0.1:4001",
+        url: "http://10.0.0.43:4000/graphql",
         formContentType: "application/x-www-form-urlencoded;charset=UTF-8",
         measurementDictionary: [
           "tbsp",
@@ -131,7 +131,7 @@ export default class Recipe extends Component {
         // if (trimmed_ingredients.length == 0){
         //   throw "Error: no data to send";
         // }
-        fetch('http://10.0.0.110:4000/graphql', {
+        fetch(this.state.url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

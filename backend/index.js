@@ -254,5 +254,5 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 app.listen(4000);
-console.log("Running a test graphql API server at http://localhost:4000/graphiql");
+console.log("Running a test graphql API server at port 4000/graphiql or 4000/graphql for programmatic queries.");
 
