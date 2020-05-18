@@ -2,10 +2,10 @@ const { Pool } = require('pg');
 const fs = require('fs');
 
 var username = 'pi';
-var password = fs.readFileSync('db/.pwd');
+var password = fs.readFileSync('db/.pwd', {encoding: 'utf8'});
 var dbHost = 'localhost';
 var dbName = 'recipe';
-console.log(typeof(password));
+
 password = password.trim();
 console.log(`Username set to ${username}\nPassword set to ${password.substr(0,4)}****`)
 
