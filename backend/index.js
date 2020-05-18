@@ -3,6 +3,7 @@ var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
 const pool = require('./db/pool');
+var cors = require('cors');
 
 const scraper = new Scraper({
     puppeteer: {
@@ -241,6 +242,7 @@ var root = {
 
 // Run the graphQL server
 var app = express();
+app.use(cors());
 app.use('/graphiql', graphqlHTTP({
     schema: schema,
     rootValue: root,

@@ -3,7 +3,7 @@ const fs = require('fs');
 
 var username = 'pi';
 var password = fs.readFileSync('db/.pwd', {encoding: 'utf8'});
-var dbHost = 'localhost';
+var dbHost = '10.0.0.43';
 var dbName = 'recipe';
 
 password = password.trim();

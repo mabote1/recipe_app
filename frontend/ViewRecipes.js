@@ -5,7 +5,7 @@ export default class ViewRecipes extends Component {
     state = {
         names: [],
         ids: [],
-        url: 'http://10.0.0.43:4000/graphql'
+        url: 'http://localhost:4000/graphql'
     }
     getRecipes = async () => {
         const query = `query getNames {
@@ -15,7 +15,6 @@ export default class ViewRecipes extends Component {
             }
         }`
         const response = await fetch(this.state.url, {
-            mode: 'no-cors',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

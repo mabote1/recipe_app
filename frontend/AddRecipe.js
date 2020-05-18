@@ -23,7 +23,7 @@ export default class Recipe extends Component {
         ],
         iid: 1,
         hmid: 1,
-        url: "http://10.0.0.43:4000/graphql",
+        url: "http://localhost:4000/graphql",
         formContentType: "application/x-www-form-urlencoded;charset=UTF-8",
         measurementDictionary: [
           "tbsp",
@@ -132,6 +132,7 @@ export default class Recipe extends Component {
         //   throw "Error: no data to send";
         // }
         fetch(this.state.url, {
+            mode: 'no-cors',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
