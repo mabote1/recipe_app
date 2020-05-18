@@ -10,11 +10,12 @@ export default class ViewRecipes extends Component {
     getRecipes = async () => {
         const query = `query getNames {
             names {
-                id
-                name
+                recipe_id
+                recipe_name
             }
         }`
         const response = await fetch(this.state.url, {
+            mode: 'no-cors',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
