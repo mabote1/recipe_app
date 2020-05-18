@@ -1,21 +1,45 @@
 import React, { Component } from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
 
-export default class HomeScreen extends Component {
+export default class ViewRecipes extends Component {
+    state = {
+        names: [],
+        ids: [],
+        url: 'http://10.0.0.43:4000/graphql'
+    }
+    getRecipes = async () => {
+        const query = `query getNames {
+            names {
+                id
+                name
+            }
+        }`
+        const response = await fetch(this.state.url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query
+            })
+        });
+        const json = await response.json();
+        console.log(json);
+    }
+    componentWillMount(){
+        var names = this.getRecipes().names
+        var ids = this.getRecipes().ids
+        this.setState()
+    }
     render() {
 	return (
           <View style = {[{flex:1}, styles.navigationContainer]}>
-            <View style={{ flex: 1, alignItems: 'center',
-                           justifyContent: 'center' }}>
-              <Text style={styles.headerStyle}>Welcome to GRUT!</Text>
+            <View style={[{ flex: 1}, styles.elementsContainer]}>
+              <Text style={styles.headerStyle}>Recipes:</Text>
               <Image style={styles.navImage}
                 source={require("./res/img.jpg")}/>
               <View style={{padding: 25}}/>
-              <Button title="Recipes"
-                      onPress={() => this.props.navigation.navigate('View Recipes')}/>
-              <Button title="Add New Recipe"
-                      onPress={() => this.props.navigation.navigate('Add Recipe')}/>
-                      <View style={{padding: 10}}/>
             </View>
           </View>
         );

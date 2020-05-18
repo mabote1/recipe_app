@@ -238,10 +238,7 @@ export default class Recipe extends Component {
         <View style={styles.container}>
 
                         	{/*added navigation section*/}
-        <View style={{paddingTop: 1, paddingBottom: 1}}/>   
-
-        <Button title="Home"
-                onPress={() => this.props.navigation.navigate('Home')}/>
+        <View style={{paddingTop: 1, paddingBottom: 1}}/>
 
             <View style = {[{flex:1}, styles.navigationContainer]}>
               <Text style={styles.headerStyle}>Add a Recipe!</Text>
@@ -252,9 +249,9 @@ export default class Recipe extends Component {
 
             <View style={[{flex: 5}, styles.elementsContainer]}>{/* This view holds the recipe name input, ingredients and POST button*/}
               <View style={[styles.formStyle, {flex:1}]}>
-                    <View style ={{backgroundColor: '#a59da6', borderWidth: 2, borderColor: '#a59da6', borderRadius: 5, flex:0}}>
-                              <TextInput
-                        style={[styles.textBorder,{backgroundColor: "#fff"}]}
+                    <View style ={{padding: 5, backgroundColor: '#a59da6', borderWidth: 2, borderColor: '#a59da6', borderRadius: 5, flex:0}}>
+                        <TextInput
+                        style={[styles.textBorder,{marginTop:10, backgroundColor: "#fff"}]}
                         placeholder="Name your Recipe!"
                         onChangeText={(name) => this.setState({name:name})}
                         value={this.state.name}
