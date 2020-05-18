@@ -253,6 +253,12 @@ app.use('/graphql', graphqlHTTP({
     graphiql: false,
 }));
 
+// Allow cross-origin requests to be made from our frontend
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://10.0.0.40:19006');
+    next();
+  });
+
 app.listen(4000);
 console.log("Running a test graphql API server at port 4000/graphiql or 4000/graphql for programmatic queries.");
 
