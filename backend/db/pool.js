@@ -6,7 +6,7 @@ var password = fs.readFileSync('db/.pwd');
 var dbHost = 'localhost';
 var dbName = 'recipe';
 
-console.log(`Username set to ${username}\nPassword set to ${password.substr(0, 4)}****`)
+console.log(`Username set to ${username}\nPassword set to ${password}****`)
 
 
 const pool = new Pool({
