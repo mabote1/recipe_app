@@ -5,7 +5,7 @@ var username = 'pi';
 var password = fs.readFileSync('db/.pwd');
 var dbHost = 'localhost';
 var dbName = 'recipe';
-
+console.log(typeof(password));
 password = password.trim();
 console.log(`Username set to ${username}\nPassword set to ${password.substr(0,4)}****`)
 
