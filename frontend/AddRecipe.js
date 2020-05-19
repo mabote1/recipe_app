@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity,Button, View, Text, TextInput, ScrollView} from 'react-native';
-import { YellowBox } from 'react-native'
 
-YellowBox.ignoreWarnings([
-	'Each child in a list should have a unique "key" prop', // TODO: Remove when fixed
-])
 export default class Recipe extends Component {
     constructor(props){
       super(props);
@@ -28,7 +24,7 @@ export default class Recipe extends Component {
         ],
         iid: 1,
         hmid: 1,
-        url: "192.168.1.20:4001",
+        url: "127.0.0.1:4001",
         formContentType: "application/x-www-form-urlencoded;charset=UTF-8",
         measurementDictionary: [
           "tbsp",
