@@ -18,7 +18,8 @@ export default class Recipe extends Component {
         proportions: [
           {
             id: 0,
-            howMuch: ''
+            howMuch: '',
+            color: '#fff'
           }
         ],
         iid: 1,
@@ -61,7 +62,6 @@ export default class Recipe extends Component {
         // }
 
         let ingredients = this.state.ingredients.map((item, key) => {
-          //item.id = this.state.ingredients[key].id;
           delete this.state.ingredients[key].id;
           item.name = this.state.ingredients[key].name.trim();
           if (this.state.proportions[key].howMuch != undefined){
@@ -119,42 +119,54 @@ export default class Recipe extends Component {
         });
         console.log("ingredients");
         console.log(ingredients);
-        console.log("end");
-        var trimmed_ingredients = [];
+        console.log("end ingredients")
+        let is_valid_structure = 1;
         for (var i=0;i<ingredients.length;i++){
           if (ingredients[i].amount + "" == "NaN" || ingredients[i].amount == 0 || ingredients[i].name == undefined || ingredients[i].name == ""){
-            continue;
+            this.updateProportions(this.state.proportions[i].howMuch, i, "#f00")
+            is_valid_structure = 0;
+          }else {
+            this.updateProportions(this.state.proportions[i].howMuch, i, "#fff")
           }
-          trimmed_ingredients.push(ingredients[i]);
         }
-        console.log(trimmed_ingredients); 
-        // if (trimmed_ingredients.length == 0){
-        //   throw "Error: no data to send";
-        // }
-        fetch('http://10.0.0.110:4000/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                query,
-                variables: {
-                    input: {
-                        name,
-                        author,
-                        description,
-                        category,
-                        calories,
-                        directions,
-                        serves,
-                        ingredients
-                    }
-                }
-            })
-        })
-        .then(res => res.json())
-        .then(data => console.log(data));
+        if (is_valid_structure == 1){
+          fetch('http://10.0.0.110:4000/graphql', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+              },
+              body: JSON.stringify({
+                  query,
+                  variables: {
+                      input: {
+                          name,
+                          author,
+                          description,
+                          category,
+                          calories,
+                          directions,
+                          serves,
+                          ingredients
+                      }
+                  }
+              })
+          })
+          .then(res => res.json())
+          .then(data => console.log(data));
+        } else {
+          alert("Your syntax is incorrect! Recipe not submitted! Make sure you have names and correct measurements for your ingredients and proportions.");
+        }
+        this.setState(state => {
+          const ingredients = state.ingredients.map((item, key) =>{
+              item.id = key;
+              return item;
+          });
+          //console.log(this.state.ingredients);
+            return {
+              ingredients,
+            };
+        });
     }
     updateIngredients = (text, key) => {
       this.setState(state => {
@@ -172,11 +184,12 @@ export default class Recipe extends Component {
           };
       });
     };
-    updateProportions = (text, key) => {
+    updateProportions = (text, key, color) => {
       this.setState(state => {
         const proportions = state.proportions.map((item, j) =>{
           if (j == key) {
               item.howMuch = text;
+              item.color = color;
               return item;
           }else {
               return item;
@@ -204,7 +217,7 @@ export default class Recipe extends Component {
     }
     addHowMuch = () => {
       //console.log("state hmid: " + this.state.hmid);
-      let newProportion = {id: this.state.hmid, name: "" }
+      let newProportion = {id: this.state.hmid, name: "", color:"#fff"}
       //console.log("new proportion id: " + newProportion.id);
       this.setState({proportions: [...this.state.proportions, newProportion]}, () =>
       {
@@ -225,9 +238,9 @@ export default class Recipe extends Component {
               />
               <TextInput
             style={[styles.textBorder,{marginTop: 10,
-              backgroundColor: "#fff"}]}
+              backgroundColor: this.state.proportions[item.id].color}]}
             placeholder="how much?"
-            onChangeText={(name) => this.updateProportions(name, key)}
+            onChangeText={(name) => this.updateProportions(name, key, this.state.proportions[item.id].color)}
             value={this.state.proportions[item.id].howMuch}
             />
             </View>
@@ -237,7 +250,7 @@ export default class Recipe extends Component {
       return (
         <View style={styles.container}>
 
-                        	{/*added navigation section*/}
+                                {/*added navigation section*/}
         <View style={{paddingTop: 1, paddingBottom: 1}}/>   
 
         <Button title="Home"
