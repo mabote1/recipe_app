@@ -83,19 +83,21 @@ export default class ButtonClient extends Component {
               }
                                                      )}
                       title='Click to add new name'/>
-            	{/*added navigation section*/}
-        <View style={{padding: 25}}/>   
-        <Button title="Button"
-                onPress={() => this.props.navigation.navigate('Button')}/>
-        <Button title="Home"
-                onPress={() => this.props.navigation.navigate('Home')}/>
+
             </View> 
             
         );
     }
 }
 
-/*const styles = StyleSheet.create({
+/*
+            	{//added navigation section}
+              <View style={{padding: 25}}/>   
+              <Button title="Button"
+                      onPress={() => this.props.navigation.navigate('Button')}/>
+              <Button title="Home"
+                      onPress={() => this.props.navigation.navigate('Home')}/>
+const styles = StyleSheet.create({
     text: {
       color: '#4f603c'
    },
