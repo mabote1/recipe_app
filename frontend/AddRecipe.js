@@ -250,7 +250,7 @@ export default class Recipe extends Component {
       return (
         <View style={styles.container}>
 
-                        	{/*added navigation section*/}
+                                {/*added navigation section*/}
         <View style={{paddingTop: 1, paddingBottom: 1}}/>   
 
         <Button title="Home"
