@@ -14,17 +14,16 @@ export default class HomeScreen extends Component {
               <Button title="New Recipe"
                       onPress={() => this.props.navigation.navigate('Add Recipe')}/>
                       <View style={{padding: 10}}/>
-              <Button title="Button"
-                      onPress={() => this.props.navigation.navigate('Button')}/>
-                      <View style={{padding: 10}}/>
-              <Button title="Recipe RESTful"
-                      onPress={() => this.props.navigation.navigate('Recipe RESTful')}/>
+              <Button title="All Recipes"
+                      onPress={() => this.props.navigation.navigate('All Recipes')}/>
             </View>
           </View>
         );
     }
 }
-
+/*              <Button title="Button"
+                      onPress={() => this.props.navigation.navigate('Button')}/>
+                      <View style={{padding: 10}}/>*/
 const styles = StyleSheet.create({
   text: {
     color: '#4f603c'

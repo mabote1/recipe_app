@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
-import { Button, View, Text, TextInput, ScrollView, StyleSheet} from 'react-native';
+import { Button, View, Text, TextInput, ScrollView, FlatList, ActivityIndicator,Alert,StyleSheet} from 'react-native';
+import { SearchBar } from 'react-native-elements'
+import { YellowBox } from 'react-native'
 
+YellowBox.ignoreWarnings([
+	'VirtualizedLists should never be nested', // TODO: Remove when fixed
+])
 export default class ButtonClient extends Component {
     constructor(props) {
         super(props);
@@ -14,8 +19,9 @@ export default class ButtonClient extends Component {
             serves: '',
             category: '',
             calories: '',
-            directions: ''
-	};
+            directions: '',
+            isLoading: true, search: ''
+	};this.arrayholder = [];
     }
 
     
@@ -27,50 +33,107 @@ export default class ButtonClient extends Component {
             .then((responseText) => {
                 if (op == 'allrecipes'){
                   this.setState({name: responseText});
-                  alert(`
+                  /*alert(`
                     Sent:  op=${JSON.stringify(op)}\nparams+method=${
 			JSON.stringify(params)}\n
-                    Received:  ${responseText}`);
+                    Received:  ${responseText}`);*/
                 }
                 else{
                   this.setState({name: ' '});
-                alert(`
+                `
                     Sent:  op=${JSON.stringify(op)}\nparams+method=${
 			JSON.stringify(params)}\n
-                    Received:  ${responseText}`);}
+                    Received:  ${responseText}`;}
             })
             .catch((error) => {
                 console.error(error);
             });
     }
+
+
+    componentDidMount() {
+      return fetch('http://192.168.1.20:28450/allrecipenames')
+        .then(response => response.json())
+        .then(responseJson => {
+          this.setState({isLoading: false,
+            dataSource: responseJson},
+            function() {
+              this.arrayholder = responseJson;
+            });
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+
+    search = text => {
+      console.log(text);
+    };
+    clear = () => {
+      this.search.clear();
+    };
     
+    SearchFilterFunction(text) {
+      //passing the inserted text in textinput
+      const newData = this.arrayholder.filter(function(item) {
+        //applying filter for the inserted text in search bar
+        const itemData = item.recipe_name ? item.recipe_name.toUpperCase() : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({
+        //setting the filtered newData on datasource
+        //After setting the data it will automatically re-render the view
+        dataSource: newData,
+        search: text,
+      });
+    }
+    ListViewItemSeparator = () => {
+      //Item sparator view
+      return (
+        <View
+          style={{
+            height: 0.3,
+            width: '90%',
+            backgroundColor: '#080808',
+          }}
+        />
+      );
+    };
     
     render(){
+      if (this.state.isLoading) {
+        //Loading View while data is loading
+        return (
+          <View style={{ flex: 1, paddingTop: 20 }}>
+            <ActivityIndicator />
+          </View>
+        );
+      }
         return(
-            <ScrollView style={{marginTop: 50,
+            <ScrollView style={{marginTop: 30,
               flex: 1,
               backgroundColor: "#fff",
               paddingLeft: 20,
               paddingRight: 20}}>
 
-
         <Button title="Home"
                 onPress={() => this.props.navigation.navigate('Home')}/>
 
-              <Text>Test Program for RESTful</Text>
               {/* Comment: The empty View below is for vertical spacing */}
               <View style={{padding: 5}}/>   
 
-              <View style={{padding: 10}}/>
-
-
               {/* RETRIEVE allrecipes */}
 	      <Button onPress={() => this.handlePress('allrecipes', 'GET')}
-	              color='red' title='Click to see all the recipes'/>
+	              color='red' title='Click to display all the recipes'/>
+                
             {/* RETRIEVE allrecipes' names */}
-          <Button onPress={() => this.handlePress('allrecipenames','GET')} 
-                   color='purple'   title='Click to see the recipe names'/>
-              
+            <View style={{padding: 10}}/> 
+            <Button onPress={() => this.handlePress('allrecipenames', 'GET')}
+	              color='blue' title='Click to reset the displayed recipes'/>
+
+            <View style={{padding: 10}}/> 
+            <Text>{this.state.name}</Text>             
               
                 <TextInput
                   style={{margin: 5, paddingLeft: 10,
@@ -132,8 +195,32 @@ export default class ButtonClient extends Component {
             }
                                                      )}
                       title='Click to add recipe'/>
-            <View style={{padding: 5}}/> 
-            <Text>{this.state.name}</Text>
+
+
+            <View style={{padding: 10}}/> 
+            <SearchBar
+          round
+          searchIcon={{ size: 24 }}
+          onChangeText={text => this.SearchFilterFunction(text)}
+          onClear={text => this.SearchFilterFunction('')}
+          placeholder="Type here to look up the names..."
+          value={this.state.search}
+        />
+        <FlatList
+          data={this.state.dataSource}
+          ItemSeparatorComponent={this.ListViewItemSeparator}
+          //Item Separator View
+          renderItem={({ item }) => (
+            // Single Comes here which will be repeatative for the FlatListItems
+            <Text style={{
+              padding: 10,
+            }}>{item.recipe_name}</Text>
+          )}
+          enableEmptySections={true}
+          style={{ marginTop: 10 }}
+          keyExtractor={(item, index) => index.toString()}
+        />
+            
             </ScrollView> 
             
         );
@@ -146,61 +233,4 @@ export default class ButtonClient extends Component {
         onPress={() => this.props.navigation.navigate('Button')}/>
 <Button title="Home"
         o8nPress={() => this.props.navigation.navigate('Home')}/>*/
-        /*const styles = StyleSheet.create({
-          text: {
-            color: '#4f603c'
-         },
-          container: {
-            marginTop: 60,
-            flex: 1,
-            backgroundColor: "#fff",
-            paddingLeft: 20,
-            paddingRight: 20
-          },
-          headerStyle: {
-            fontSize: 24,
-            textAlign: 'center',
-            fontWeight: '200',
-            paddingTop: 25
-          },
-          elementsContainer: {
-            backgroundColor: '#fff',
-            paddingLeft: 25,
-            paddingRight: 25
-          },
-          navContainer: {
-            backgroundColor: '#a59da6',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            justifyContent: 'space-around',
-            paddingTop: 10,
-            paddingBottom: 10
-          },
-          navImage: {
-            width:100,
-            height:90
-          },
-          formStyle: {
-            backgroundColor: '#a59da6',
-            margin: 10,
-            padding:5,
-            borderWidth : 2,
-            borderColor: '#a59da6',
-            borderRadius: 5
-          },
-          textBorder: {
-            borderWidth: 2,
-            borderColor: '#fff',
-            borderRadius: 5
-          },
-          containerBorder:{
-            borderWidth: 2,
-            borderColor: '#a59da6',
-            borderRadius: 5
-          },
-          rowStyle: {
-            flexDirection: 'row',
-            justifyContent: 'space-around'
-          }
-        });*/
-        
+ 
