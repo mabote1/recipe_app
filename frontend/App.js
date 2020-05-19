@@ -17,11 +17,10 @@ export default class Nav extends Component {
               <Stack.Navigator>
                 <Stack.Screen name="Home" component={HomeScreen}/>
                 <Stack.Screen name="Add Recipe" component={AddRecipe} />
-                <Stack.Screen name="All Recipes" component={AppRESTful} />
+                <Stack.Screen name="Button" component={App} />
+                <Stack.Screen name="Recipe RESTful" component={AppRESTful} />
               </Stack.Navigator>
             </NavigationContainer>
         );
     }
 }
-/*
-                <Stack.Screen name="Button" component={App} />*/

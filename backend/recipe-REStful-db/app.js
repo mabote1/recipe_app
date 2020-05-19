@@ -20,10 +20,10 @@ app.get('/allrecipes', (request, response) => {
 })
 
 app.get('/allrecipenames', (request, response) => {
-    //console.log('Got request for all recipe names');
-    pool.query(`SELECT * FROM recipes`)
+    console.log('Got request for all recipe names');
+    pool.query(`SELECT recipe_name,description,directions FROM recipes;`)
         .then(res => {
-            //console.log('DB response: ' + JSON.stringify(res.rows));
+            console.log('DB response: ' + JSON.stringify(res.rows));
             response.send(res.rows);
         })
         .catch(err => 
