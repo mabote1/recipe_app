@@ -1,7 +1,6 @@
 const { Pool } = require('pg');
 const fs = require('fs');
 const prompt = require('prompt-sync')();
-
 const lib = require('./mcalib');
 lib.setErrorPrefix(__filename);  // set label for lib error messages
 
