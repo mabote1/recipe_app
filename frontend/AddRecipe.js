@@ -134,7 +134,7 @@ export default class Recipe extends Component {
           }
         }
         if (is_valid_structure == 1){
-          fetch('http://10.0.0.110:4000/graphql', {
+          fetch('http://10.0.0.40:4000/graphql', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -156,6 +156,7 @@ export default class Recipe extends Component {
                   }
               })
           })
+          .then(alert('Recipe Submitted!'))
           .then(res => res.json())
           .then(data => console.log(data));
         } else {
@@ -256,10 +257,6 @@ export default class Recipe extends Component {
 
                                 {/*added navigation section*/}
         <View style={{paddingTop: 1, paddingBottom: 1}}/>   
-
-        <Button title="Home"
-                onPress={() => this.props.navigation.navigate('Home')}/>
-
             <View style = {[{flex:1}, styles.navigationContainer]}>
               <Text style={styles.headerStyle}>Add a Recipe!</Text>
               <Image style={styles.navImage}

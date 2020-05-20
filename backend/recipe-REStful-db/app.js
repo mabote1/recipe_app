@@ -1,9 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var os = require('os');
-const { Pool } = require('pg');
+const pool = require('./pool');
+var cors = require('cors');
 
 var app = express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/allrecipes', (request, response) => {
@@ -89,35 +91,7 @@ console.log(`Starting button-server-db app`);
 const lib = require('./mcalib');
 lib.setErrorPrefix(__filename);  // set label for lib error messages
 
-// database connection parameters
-const dbHost = "csinparallel.cs.stolaf.edu";
-const user = 'mabote1';    // CHANGE to your username, e.g., jones1
-const password = lib.getPGPassword(dbHost);  // uncomment for Windows
-const dbName = 'mca_s20';
-const schema = 'mabote1';  // CHANGE to your username as schema for Lab 5
-                       // CHANGE to team schema for project
-
-const pool = new Pool({
-    user: user,
-    password: password,                      // uncomment for Windows
-    host: dbHost,
-    database: dbName,
-    port: 5432,
-});
-
-var pgschema = 'mca_s20_recipe, mabote1'
-
-pool.on('connect', client => {
-    client.query(`SET search_path = ${pgschema}, public;`)
-});
-
-pool.on('error', (err, client) => {
-  console.error('Unexpected error on idle client', err)
-  process.exit(-1)
-})
-
-console.log(`Connected to database ${dbName} on ${dbHost}`);
-
 console.log("IP addresses:  ", lib.getIPAddresses());
+
 
 module.exports = app;

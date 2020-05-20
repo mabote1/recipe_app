@@ -16,16 +16,15 @@ if(process.env.NODE_ENV === "prod"){
     username = prompt('Enter your DB Username: ') || 'mabote1';
 }
 else {
-    username = 'mabote1'
+    username = 'olson16'
 }
 console.log(`Username set to ${username}`);
 
-var password = '';
-try {
-    password = lib.getPGPassword(dbHost);  // uncomment for Windows
-} catch {
-    password = fs.readFileSync('db/.pwd', {encoding:'utf8'});
-}
+password = fs.readFileSync('../db/.pwd', {encoding:'utf8'});
+
+password = password.trim();
+console.log(`password set to ${password.substr(0,4)}`);
+
 const dbName = 'mca_s20';
 
 const pool = new Pool({

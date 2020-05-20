@@ -13,10 +13,10 @@ console.log(`Hello! Running in ${process.env.NODE_ENV} mode.`)
 var username = '';
 
 if(process.env.NODE_ENV === "prod"){
-    username = prompt('Enter your DB Username: ') || 'mabote1';
+    username = prompt('Enter your DB Username: ') || 'olson16';
 }
 else {
-    username = 'mabote1'
+    username = 'olson16'
 }
 console.log(`Username set to ${username}`);
 
