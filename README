@@ -1,7 +1,7 @@
 This is a recipe app with a New Recipe button and All Recipes button.
 
 Note: Change the IP addresses in frontend/AddRecipe.js and frontend/recipe-RESTful_frontend/App.js. 
-For testing New Recipe button, make appropriate changes to the username in the file backend/db/poo.js. 
+For testing New Recipe button, make appropriate changes to the username in the file backend/db/pool.js. 
 For testing All Recipes button, make approriate changes to the username in the file 
 backend/recipe-RESTful-db/app.js.
 
