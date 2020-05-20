@@ -4,6 +4,7 @@ var { buildSchema } = require('graphql');
 var Scraper = require('images-scraper');
 //const fs = require('fs');
 const pool = require('./db/pool');
+const cors = require('cors');
 
 const scraper = new Scraper({
     puppeteer: {
@@ -61,6 +62,12 @@ class Recipe {
                    .then(res => {
                        return res.rows[0].description;
                    })
+    }
+    directions() {
+        return this.pool.query(`SELECT directions FROM recipes WHERE recipe_id = $1`,[this.id])
+                    .then(res => {
+                        return res.rows[0].directions;
+                    })
     }
     category() {
         return this.pool.query(`SELECT category FROM recipes WHERE recipe_id = $1`,[this.id])
@@ -242,6 +249,7 @@ var root = {
 
 // Run the graphQL server
 var app = express();
+app.use(cors());
 app.use('/graphiql', graphqlHTTP({
     schema: schema,
     rootValue: root,

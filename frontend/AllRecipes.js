@@ -10,7 +10,7 @@ export default class ButtonClient extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: 'http://192.168.1.20:28450',
+            url: "http://localhost:28450",
             formContentType: "application/x-www-form-urlencoded;charset=UTF-8", 
             name: ' ',
             recipe_name: '',
@@ -52,7 +52,7 @@ export default class ButtonClient extends Component {
 
 
     componentDidMount() {
-      return fetch('http://192.168.1.20:28450/allrecipenames')
+      return fetch('http://10.0.0.40:28450/allrecipenames')
         .then(response => response.json())
         .then(responseJson => {
           this.setState({isLoading: false,
@@ -117,20 +117,40 @@ export default class ButtonClient extends Component {
               paddingLeft: 20,
               paddingRight: 20}}>
 
-        <Button title="Home"
-                onPress={() => this.props.navigation.navigate('Home')}/>
+        
 
               {/* Comment: The empty View below is for vertical spacing */}
-              <View style={{padding: 5}}/>   
+              <View style={{padding: 5}}/> 
+              <SearchBar
+          round
+          searchIcon={{ size: 24 }}
+          onChangeText={text => this.SearchFilterFunction(text)}
+          onClear={text => this.SearchFilterFunction('')}
+          placeholder="Type here to look up the names..."
+          value={this.state.search}
+        />
+        <FlatList
+          data={this.state.dataSource}
+          ItemSeparatorComponent={this.ListViewItemSeparator}
+          //Item Separator View
+          renderItem={({ item }) => (
+            // Single Comes here which will be repeatative for the FlatListItems
+            <Button title={item.recipe_name}
+                onPress={() => this.props.navigation.navigate('View Recipe', {recipe_id: item.recipe_id})}/>
+          )}
+          enableEmptySections={true}
+          style={{ marginTop: 10 }}
+          keyExtractor={(item, index) => index.toString()}
+        />  
 
               {/* RETRIEVE allrecipes */}
 	      <Button onPress={() => this.handlePress('allrecipes', 'GET')}
-	              color='red' title='Click to display all the recipes'/>
+	              color='red' title='Click to display raw data'/>
                 
             {/* RETRIEVE allrecipes' names */}
             <View style={{padding: 10}}/> 
             <Button onPress={() => this.handlePress('allrecipenames', 'GET')}
-	              color='blue' title='Click to reset the displayed recipes'/>
+	              color='blue' title='Click to clear raw data'/>
 
             <View style={{padding: 10}}/> 
             <Text>{this.state.name}</Text>             
@@ -198,28 +218,7 @@ export default class ButtonClient extends Component {
 
 
             <View style={{padding: 10}}/> 
-            <SearchBar
-          round
-          searchIcon={{ size: 24 }}
-          onChangeText={text => this.SearchFilterFunction(text)}
-          onClear={text => this.SearchFilterFunction('')}
-          placeholder="Type here to look up the names..."
-          value={this.state.search}
-        />
-        <FlatList
-          data={this.state.dataSource}
-          ItemSeparatorComponent={this.ListViewItemSeparator}
-          //Item Separator View
-          renderItem={({ item }) => (
-            // Single Comes here which will be repeatative for the FlatListItems
-            <Text style={{
-              padding: 10,
-            }}>{item.recipe_name}</Text>
-          )}
-          enableEmptySections={true}
-          style={{ marginTop: 10 }}
-          keyExtractor={(item, index) => index.toString()}
-        />
+            
             
             </ScrollView> 
             
