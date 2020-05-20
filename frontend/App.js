@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './HomeScreen';
 import AddRecipe from './AddRecipe';
 import App from './button_frontend/App';
-import AppRESTful from './recipe-RESTful_frontend/App';
+import AppRESTful from './AllRecipes';
 
 const Stack = createStackNavigator();
 
