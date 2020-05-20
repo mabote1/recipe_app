@@ -13,7 +13,18 @@
 
 ### Setting up backend
 
-1. 
+1. Change the variables in `backend/gql/db/.env` to suit your needs.
+2. To run the GraphQL API, open a terminal and navigate to `/path/to/backend/gql` and run ```npm run deploy```
+3. To run the RESTful API, open a new terminal and navigate to `/path/to/backend/rest and run ```npm run deploy```
+
+### Setting up frontend
+
+1. Open these three files (all in the frontend folder): AllRecipes.js, AddRecipe.js, ViewRecipe.js
+2. In each, change the `this.state.url` field to match your backend host's IP address.
+3. Open a new terminal and navigate to `/path/to/frontend`, and run ```npm start```
+
+
+### Setup/Install Old
 
 Note: Change the IP addresses in frontend/AddRecipe.js and frontend/recipe-RESTful_frontend/App.js.
 For testing New Recipe button, make appropriate changes to the username in the file backend/db/pool.js.

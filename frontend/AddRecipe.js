@@ -9,7 +9,7 @@ export default class Recipe extends Component {
     constructor(props){
       super(props);
       this.state = {
-        url: "http://localhost:4000/graphql",
+        url: 'http://localhost:4000/graphql',
         name: '',
         category: '', 
         calories: '',
