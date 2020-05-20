@@ -24,6 +24,7 @@ export default class HomeScreen extends Component {
 /*              <Button title="Button"
                       onPress={() => this.props.navigation.navigate('Button')}/>
                       <View style={{padding: 10}}/>*/
+                      
 const styles = StyleSheet.create({
   text: {
     color: '#4f603c'
