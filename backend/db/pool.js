@@ -10,14 +10,8 @@ const dbHost = "csinparallel.cs.stolaf.edu";
 
 console.log(`Hello! Running in ${process.env.NODE_ENV} mode.`)
 
-var username = '';
+var username = 'ENTER_USERNAME_HERE';
 
-if(process.env.NODE_ENV === "prod"){
-    username = prompt('Enter your DB Username: ') || 'olson16';
-}
-else {
-    username = 'olson16'
-}
 console.log(`Username set to ${username}`);
 
 var password = '';
