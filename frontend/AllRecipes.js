@@ -10,7 +10,7 @@ export default class ButtonClient extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: 'http://10.0.0.40:28450',
+            url: 'http://localhost:28450',
             formContentType: "application/x-www-form-urlencoded;charset=UTF-8", 
             name: ' ',
             recipe_name: '',

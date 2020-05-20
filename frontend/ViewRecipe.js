@@ -7,7 +7,7 @@ export default class ViewRecipe extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: 'http://10.0.0.40:4000/graphql',
+            url: 'http://localhost:4000/graphql',
             formContentType: "application/x-www-form-urlencoded;charset=UTF-8",
             recipe_id: -1,
             recipe_name: '',

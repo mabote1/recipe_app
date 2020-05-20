@@ -9,6 +9,7 @@ export default class Recipe extends Component {
     constructor(props){
       super(props);
       this.state = {
+        url: "http://localhost:4000/graphql",
         name: '',
         category: '', 
         calories: '',
@@ -28,7 +29,6 @@ export default class Recipe extends Component {
         ],
         iid: 1,
         hmid: 1,
-        url: "192.168.1.20:4001",
         formContentType: "application/x-www-form-urlencoded;charset=UTF-8",
         measurementDictionary: [
           "tbsp",
@@ -134,7 +134,7 @@ export default class Recipe extends Component {
           }
         }
         if (is_valid_structure == 1){
-          fetch('http://10.0.0.40:4000/graphql', {
+          fetch(this.state.url, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
