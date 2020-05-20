@@ -52,7 +52,7 @@ export default class ButtonClient extends Component {
 
 
     componentDidMount() {
-      return fetch('http://10.0.0.40:28450/allrecipenames')
+      return fetch(this.state.url+'/allrecipenames')
         .then(response => response.json())
         .then(responseJson => {
           this.setState({isLoading: false,
